@@ -1,26 +1,165 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Color palette */
+  --color-primary:  #4f46e5; /* indigo-600 */
+  --color-primary-600: #4338ca;
+  --color-accent:   #06b6d4; /* teal-400 */
+  --color-bg:       #ffffff;
+  --color-surface:  #f8fafc;
+  --color-muted:    #6b7280;
+  --color-text:     #0f172a;
+  --color-border:   rgba(15,23,42,0.06);
+
+  /* Typography */
+  --font-sans: var(--font-inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial);
+  --base-line-height: 1.45;
+
+  /* Sizing & elevation */
+  --radius: 10px;
+  --container-width: 880px;
+  --card-shadow: 0 6px 18px rgba(15,23,42,0.06);
+
+  /* Motion */
+  --ease: cubic-bezier(.2,.9,.3,1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Responsive type base */
+html {
+  font-size: clamp(14px, 1.35vw, 16px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-bg:      #061421;
+    --color-surface: #071428;
+    --color-muted:   #9ca3af;
+    --color-text:    #e6eef6;
+    --color-border:  rgba(255,255,255,0.06);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Global reset and sensible defaults */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
+html, body, #__next {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: var(--base-line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container utility */
+.container {
+  width: min(92%, var(--container-width));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Headings */
+h1 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0 0 0.5rem 0; }
+h2 { font-size: clamp(1.25rem, 2.1vw, 1.5rem); margin: 0 0 0.5rem 0; }
+h3 { font-size: 1.125rem; margin: 0 0 0.5rem 0; }
+p { margin: 0 0 1rem 0; color: var(--color-muted); }
+
+/* Cards and surfaces */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem;
+}
+
+/* Form controls - consistent styling across browsers */
+label { display: inline-block; margin-bottom: 0.35rem; font-weight: 600; color: var(--color-text); }
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  transition: box-shadow 150ms var(--ease), border-color 150ms var(--ease);
+}
+
+textarea { min-height: 120px; resize: vertical; }
+
+input::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--color-muted) 60%, transparent); }
+
+/* Focus and accessibility */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 20%, white 80%);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 120ms var(--ease), box-shadow 120ms var(--ease), background-color 120ms var(--ease);
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 6px 14px rgba(79,70,229,0.12);
+}
+.btn-primary:hover { background: var(--color-primary-600); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+/* Stepper / progress UI helpers */
+.stepper { display:flex; gap: .75rem; align-items:center; }
+.step { width:2rem; height:2rem; border-radius:999px; display:inline-grid; place-items:center; background:var(--color-surface); border:1px solid var(--color-border); color:var(--color-muted); font-weight:700; }
+.step.active { background: var(--color-primary); color: white; border-color: transparent; box-shadow: 0 6px 18px rgba(79,70,229,0.12); }
+
+/* Utilities */
+.muted { color: var(--color-muted); }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* Small-screen tweaks */
+@media (max-width: 520px) {
+  .card { padding: 1rem; }
+  .btn { width: 100%; }
+}
+
+/* gentle transitions for interactive elements */
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
